@@ -3,70 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>簡単Webhook管理</title>
+  <title>Webhook Sender</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <div class="container">
-    <header>
-      <h1>Webhookを簡単に管理＆送信</h1>
-      <div class="language-switcher">
-        <button id="lang-en">English</button>
-        <button id="lang-ja">日本語</button>
+  <header>
+    <h1>Webhook Sender</h1>
+    <p>Webhookを簡単に管理・送信できるツール</p>
+  </header>
+
+  <main>
+    <!-- Webhookの追加 -->
+    <section id="webhookManager">
+      <h2>Webhook管理</h2>
+      <div>
+        <input type="text" id="newWebhook" placeholder="Webhook URLを入力してください">
+        <button id="addWebhook">追加</button>
       </div>
-    </header>
+      <h3>保存済みWebhook</h3>
+      <ul id="savedWebhooks"></ul>
+    </section>
 
-    <main>
-      <!-- Webhook URL管理セクション -->
-      <section id="webhookManager">
-        <h2>Webhookの管理</h2>
-        <div class="webhook-list">
-          <ul id="savedWebhooks"></ul>
+    <!-- Webhook送信フォーム -->
+    <section id="webhookSender">
+      <h2>Webhook送信</h2>
+      <form id="webhookForm">
+        <label for="webhookSelect">Webhookを選択:</label>
+        <select id="webhookSelect" multiple></select>
+
+        <label for="message">メッセージ:</label>
+        <textarea id="message" placeholder="送信するメッセージを入力"></textarea>
+
+        <label for="fileUpload">ファイルを添付:</label>
+        <input type="file" id="fileUpload" multiple>
+
+        <label for="repeatCount">繰り返し回数:</label>
+        <div class="repeat-options">
+          <button type="button" onclick="setRepeatCount(1)">1回</button>
+          <button type="button" onclick="setRepeatCount(10)">10回</button>
+          <button type="button" onclick="setRepeatCount(50)">50回</button>
+          <button type="button" onclick="setRepeatCount(100)">100回</button>
+          <input type="number" id="repeatCount" value="1" min="1" max="100">
         </div>
-        <input type="text" id="newWebhook" placeholder="新しいWebhook URLを入力" />
-        <button id="addWebhook">保存</button>
-      </section>
 
-      <!-- メッセージ送信フォーム -->
-      <section id="webhookSender">
-        <h2>Webhookの送信</h2>
-        <form id="webhookForm">
-          <label for="webhookSelect">送信するWebhook:</label>
-          <select id="webhookSelect" multiple></select>
+        <button type="submit">送信</button>
+      </form>
+    </section>
 
-          <label for="message">メッセージ:</label>
-          <textarea id="message" placeholder="メッセージを入力してください"></textarea>
+    <!-- 履歴 -->
+    <section id="historySection">
+      <h2>送信履歴</h2>
+      <ul id="historyList"></ul>
+    </section>
 
-          <label for="repeatCount">繰り返し送信（1～100回）:</label>
-          <input type="number" id="repeatCount" min="1" max="100" value="1">
+    <!-- 統計 -->
+    <section id="statsSection">
+      <h2>送信統計</h2>
+      <p id="statsDisplay">成功: 0 | 失敗: 0</p>
+    </section>
+  </main>
 
-          <label for="fileUpload">ファイルアップロード:</label>
-          <input type="file" id="fileUpload" multiple>
+  <footer>
+    <p>© 2024 Webhook Sender | Create by zenon-i</p>
+  </footer>
 
-          <div id="preview"></div>
-
-          <button type="submit">送信</button>
-          <button type="button" id="repeatButton">もう一度送信</button>
-        </form>
-      </section>
-
-      <!-- 送信履歴 -->
-      <section id="history">
-        <h2>送信履歴</h2>
-        <ul id="historyList"></ul>
-      </section>
-
-      <!-- 統計ダッシュボード -->
-      <section id="stats">
-        <h2>送信統計</h2>
-        <div id="statsDisplay">まだ送信はありません。</div>
-      </section>
-    </main>
-
-    <footer>
-      <p>作成者: Zenon | 簡単Webhook管理</p>
-    </footer>
-  </div>
   <script src="script.js"></script>
 </body>
 </html>
