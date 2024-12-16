@@ -4,68 +4,61 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Webhook Sender</title>
-  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Webhook Sender</h1>
-    <p>Webhookを簡単に管理・送信できるツール</p>
-  </header>
+  <div class="container">
+    <h1>Webhook Spamer</h1>
 
-  <main>
-    <!-- Webhookの追加 -->
-    <section id="webhookManager">
-      <h2>Webhook管理</h2>
-      <div>
-        <input type="text" id="newWebhook" placeholder="Webhook URLを入力してください">
-        <button id="addWebhook">追加</button>
-      </div>
-      <h3>保存済みWebhook</h3>
+    <!-- Webhook追加 -->
+    <div class="input-group">
+      <label for="newWebhook">Webhook URLを追加:</label>
+      <input type="text" id="newWebhook" placeholder="Webhook URLを入力してください">
+      <button id="addWebhook">追加</button>
+    </div>
+
+    <!-- 保存されたWebhookリスト -->
+    <div>
+      <h2>保存されたWebhooks</h2>
       <ul id="savedWebhooks"></ul>
-    </section>
+    </div>
 
     <!-- Webhook送信フォーム -->
-    <section id="webhookSender">
-      <h2>Webhook送信</h2>
-      <form id="webhookForm">
-        <label for="webhookSelect">Webhookを選択:</label>
+    <form id="webhookForm">
+      <div class="input-group">
+        <label for="webhookSelect">使用するWebhook:</label>
         <select id="webhookSelect" multiple></select>
-
-        <label for="message">メッセージ:</label>
-        <textarea id="message" placeholder="送信するメッセージを入力"></textarea>
-
-        <label for="fileUpload">ファイルを添付:</label>
+      </div>
+      <div class="input-group">
+        <label for="message">メッセージ内容:</label>
+        <textarea id="message" rows="4" placeholder="メッセージを入力"></textarea>
+      </div>
+      <div class="input-group">
+        <label for="fileUpload">ファイルをアップロード (任意):</label>
         <input type="file" id="fileUpload" multiple>
-
+      </div>
+      <div class="input-group">
         <label for="repeatCount">繰り返し回数:</label>
-        <div class="repeat-options">
-          <button type="button" onclick="setRepeatCount(1)">1回</button>
-          <button type="button" onclick="setRepeatCount(10)">10回</button>
-          <button type="button" onclick="setRepeatCount(50)">50回</button>
-          <button type="button" onclick="setRepeatCount(100)">100回</button>
-          <input type="number" id="repeatCount" value="1" min="1" max="100">
-        </div>
+        <input type="number" id="repeatCount" value="1" min="1" max="100">
+      </div>
+      <div class="input-group">
+        <label for="sendCount">一度に送信するWebhook数:</label>
+        <input type="number" id="sendCount" value="1" min="1">
+      </div>
+      <button type="submit">Webhook送信</button>
+    </form>
 
-        <button type="submit">送信</button>
-      </form>
-    </section>
-
-    <!-- 履歴 -->
-    <section id="historySection">
+    <!-- 統計と履歴 -->
+    <div>
+      <h2>統計情報</h2>
+      <p id="statsDisplay">成功: 0 | 失敗: 0</p>
+    </div>
+    <div>
       <h2>送信履歴</h2>
       <ul id="historyList"></ul>
-    </section>
-
-    <!-- 統計 -->
-    <section id="statsSection">
-      <h2>送信統計</h2>
-      <p id="statsDisplay">成功: 0 | 失敗: 0</p>
-    </section>
-  </main>
-
-  <footer>
-    <p>© 2024 Webhook Sender | Create by zenon-i</p>
-  </footer>
+    </div>
+  </div>
+  <p>2024 Webhook Spamer | Create by Zenon-i</p>
 
   <script src="script.js"></script>
 </body>
