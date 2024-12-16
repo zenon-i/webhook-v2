@@ -1,66 +1,88 @@
 // script.js
 
-document.getElementById("webhookForm").addEventListener("submit", async (e) => {
+const savedWebhooks = [];
+const history = [];
+let stats = { success: 0, failed: 0 };
+
+// Webhookの追加
+document.getElementById('addWebhook').addEventListener('click', () => {
+  const newWebhook = document.getElementById('newWebhook').value;
+  if (newWebhook) {
+    savedWebhooks.push(newWebhook);
+    updateWebhookList();
+    document.getElementById('newWebhook').value = '';
+  }
+});
+
+function updateWebhookList() {
+  const list = document.getElementById('savedWebhooks');
+  const select = document.getElementById('webhookSelect');
+  list.innerHTML = '';
+  select.innerHTML = '';
+
+  savedWebhooks.forEach((webhook, index) => {
+    const li = document.createElement('li');
+    li.textContent = webhook;
+    list.appendChild(li);
+
+    const option = document.createElement('option');
+    option.value = webhook;
+    option.textContent = `Webhook ${index + 1}`;
+    select.appendChild(option);
+  });
+}
+
+// Webhookの送信
+document.getElementById('webhookForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
-  const webhookURL = document.getElementById("webhookURL").value;
-  const message = document.getElementById("message").value;
-  const count = parseInt(document.getElementById("count").value);
-  const file = document.getElementById("file").files[0];
-  const image = document.getElementById("image").value;
+  const webhooks = Array.from(document.getElementById('webhookSelect').selectedOptions).map(
+    (opt) => opt.value
+  );
+  const message = document.getElementById('message').value;
+  const repeatCount = parseInt(document.getElementById('repeatCount').value, 10);
+  const files = document.getElementById('fileUpload').files;
 
-  if (!webhookURL || count > 100) {
-    alert("Please enter a valid Webhook URL and a count less than or equal to 100.");
+  if (webhooks.length === 0 || repeatCount < 1 || repeatCount > 100) {
+    alert('Webhookを選択し、1～100回の範囲で回数を指定してください。');
     return;
   }
 
-  for (let i = 0; i < count; i++) {
-    const formData = new FormData();
-    formData.append("content", message);
-    if (file) formData.append("file", file);
-    if (image) formData.append("embeds", JSON.stringify([{ image: { url: image } }]));
+  for (let i = 0; i < repeatCount; i++) {
+    for (const webhook of webhooks) {
+      const formData = new FormData();
+      formData.append('content', message);
 
-    try {
-      await fetch(webhookURL, { method: "POST", body: formData });
-      console.log(`Message ${i + 1} sent successfully.`);
-    } catch (error) {
-      console.error(`Error sending message ${i + 1}:`, error);
+      Array.from(files).forEach((file) => {
+        formData.append('file', file);
+      });
+
+      try {
+        await fetch(webhook, { method: 'POST', body: formData });
+        stats.success++;
+        history.push(`成功: ${webhook}`);
+      } catch {
+        stats.failed++;
+        history.push(`失敗: ${webhook}`);
+      }
     }
   }
 
-  alert("Messages sent successfully!");
+  updateHistory();
+  updateStats();
 });
 
-// Language switcher
-const enTexts = {
-  title: "Discord Webhook Manager",
-  webhookURL: "Webhook URL:",
-  message: "Message:",
-  count: "Send Count (1-100):",
-  file: "Include File:",
-  image: "Include Image (URL):",
-  send: "Send",
-};
+function updateHistory() {
+  const list = document.getElementById('historyList');
+  list.innerHTML = '';
+  history.forEach((entry) => {
+    const li = document.createElement('li');
+    li.textContent = entry;
+    list.appendChild(li);
+  });
+}
 
-const jaTexts = {
-  title: "ディスコードウェブフックマネージャー",
-  webhookURL: "Webhook URL:",
-  message: "メッセージ:",
-  count: "送信回数 (1-100):",
-  file: "ファイルを含む:",
-  image: "画像を含む (URL):",
-  send: "送信",
-};
-
-document.getElementById("en").addEventListener("click", () => switchLanguage(enTexts));
-document.getElementById("ja").addEventListener("click", () => switchLanguage(jaTexts));
-
-function switchLanguage(texts) {
-  document.getElementById("title").textContent = texts.title;
-  document.querySelector("label[for='webhookURL']").textContent = texts.webhookURL;
-  document.querySelector("label[for='message']").textContent = texts.message;
-  document.querySelector("label[for='count']").textContent = texts.count;
-  document.querySelector("label[for='file']").textContent = texts.file;
-  document.querySelector("label[for='image']").textContent = texts.image;
-  document.querySelector("button[type='submit']").textContent = texts.send;
+function updateStats() {
+  const display = document.getElementById('statsDisplay');
+  display.textContent = `成功: ${stats.success} | 失敗: ${stats.failed}`;
 }
