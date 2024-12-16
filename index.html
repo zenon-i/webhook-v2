@@ -1,42 +1,70 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Discord Webhook Manager</title>
+  <title>簡単Webhook管理</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1 id="title">Discord Webhook Manager</h1>
+      <h1>Webhookを簡単に管理＆送信</h1>
       <div class="language-switcher">
-        <button id="en">English</button>
-        <button id="ja">日本語</button>
+        <button id="lang-en">English</button>
+        <button id="lang-ja">日本語</button>
       </div>
     </header>
+
     <main>
-      <form id="webhookForm">
-        <label for="webhookURL">Webhook URL:</label>
-        <input type="text" id="webhookURL" placeholder="Enter Webhook URL" required>
-        
-        <label for="message">Message:</label>
-        <textarea id="message" placeholder="Enter your message"></textarea>
-        
-        <label for="count">Send Count (1-100):</label>
-        <input type="number" id="count" min="1" max="100" value="1">
+      <!-- Webhook URL管理セクション -->
+      <section id="webhookManager">
+        <h2>Webhookの管理</h2>
+        <div class="webhook-list">
+          <ul id="savedWebhooks"></ul>
+        </div>
+        <input type="text" id="newWebhook" placeholder="新しいWebhook URLを入力" />
+        <button id="addWebhook">保存</button>
+      </section>
 
-        <label for="file">Include File:</label>
-        <input type="file" id="file" accept="image/*">
+      <!-- メッセージ送信フォーム -->
+      <section id="webhookSender">
+        <h2>Webhookの送信</h2>
+        <form id="webhookForm">
+          <label for="webhookSelect">送信するWebhook:</label>
+          <select id="webhookSelect" multiple></select>
 
-        <label for="image">Include Image (URL):</label>
-        <input type="text" id="image" placeholder="Enter Image URL">
+          <label for="message">メッセージ:</label>
+          <textarea id="message" placeholder="メッセージを入力してください"></textarea>
 
-        <button type="submit">Send</button>
-      </form>
+          <label for="repeatCount">繰り返し送信（1～100回）:</label>
+          <input type="number" id="repeatCount" min="1" max="100" value="1">
+
+          <label for="fileUpload">ファイルアップロード:</label>
+          <input type="file" id="fileUpload" multiple>
+
+          <div id="preview"></div>
+
+          <button type="submit">送信</button>
+          <button type="button" id="repeatButton">もう一度送信</button>
+        </form>
+      </section>
+
+      <!-- 送信履歴 -->
+      <section id="history">
+        <h2>送信履歴</h2>
+        <ul id="historyList"></ul>
+      </section>
+
+      <!-- 統計ダッシュボード -->
+      <section id="stats">
+        <h2>送信統計</h2>
+        <div id="statsDisplay">まだ送信はありません。</div>
+      </section>
     </main>
+
     <footer>
-      <p>Made with ❤️ by Zenon</p>
+      <p>作成者: Zenon | 簡単Webhook管理</p>
     </footer>
   </div>
   <script src="script.js"></script>
