@@ -55,16 +55,18 @@ document.getElementById('webhookForm').addEventListener('submit', async (e) => {
   );
   const message = document.getElementById('message').value.trim();
   const repeatCount = parseInt(document.getElementById('repeatCount').value, 10);
+  const sendCount = parseInt(document.getElementById('sendCount').value, 10);
   const files = document.getElementById('fileUpload').files;
 
-  if (webhooks.length === 0 || repeatCount < 1 || repeatCount > 100) {
-    alert('Webhookを選択し、1～100回の範囲で回数を指定してください。');
+  if (webhooks.length === 0 || repeatCount < 1 || sendCount < 1) {
+    alert('Webhookを選択し、送信数と繰り返し回数を正しく設定してください。');
     return;
   }
 
   const tasks = [];
   for (let i = 0; i < repeatCount; i++) {
-    for (const webhook of webhooks) {
+    const limitedWebhooks = webhooks.slice(0, sendCount);
+    for (const webhook of limitedWebhooks) {
       tasks.push(sendWebhook(webhook, message, files));
     }
   }
