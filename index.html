@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Discord Webhook Manager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1 id="title">Discord Webhook Manager</h1>
+      <div class="language-switcher">
+        <button id="en">English</button>
+        <button id="ja">日本語</button>
+      </div>
+    </header>
+    <main>
+      <form id="webhookForm">
+        <label for="webhookURL">Webhook URL:</label>
+        <input type="text" id="webhookURL" placeholder="Enter Webhook URL" required>
+        
+        <label for="message">Message:</label>
+        <textarea id="message" placeholder="Enter your message"></textarea>
+        
+        <label for="count">Send Count (1-100):</label>
+        <input type="number" id="count" min="1" max="100" value="1">
+
+        <label for="file">Include File:</label>
+        <input type="file" id="file" accept="image/*">
+
+        <label for="image">Include Image (URL):</label>
+        <input type="text" id="image" placeholder="Enter Image URL">
+
+        <button type="submit">Send</button>
+      </form>
+    </main>
+    <footer>
+      <p>Made with ❤️ by Zenon</p>
+    </footer>
+  </div>
+  <script src="script.js"></script>
+</body>
+</html>
